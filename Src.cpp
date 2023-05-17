@@ -5,9 +5,30 @@ sol 1.1
 #include <catch2/catch.hpp>
 
 bool isPerfectSquare(int n) {
-    int k = sqrt(n);
-    return k * k == n;
+    if (n < 0) {
+        return false;
+    } else if (n == 0 || n == 1) {
+        return true;
+    }
+
+    long left = 1, right = n;
+
+    while (left <= right) {
+        long mid = left + (right - left) / 2;
+        long square = mid * mid;
+
+        if (square == n) {
+            return true;
+        } else if (square < n) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return false;
 }
+
 
 TEST_CASE("Test isPerfectSquare") {
     REQUIRE(isPerfectSquare(4) == true);
@@ -25,8 +46,7 @@ int main() {
 
     if (isPerfectSquare(n)) {
         std::cout << n << " is a perfect square." << std::endl;
-    }
-    else {
+    } else {
         std::cout << n << " is not a perfect square." << std::endl;
     }
 
@@ -39,7 +59,7 @@ sol 1.2
 #include <vector>
 #include <catch2/catch.hpp>
 
-std::vector<int> mergeSortedLists(const std::vector<int>&a, const std::vector<int>&b) {
+std::vector<int> mergeSortedLists(const std::vector<int>& a, const std::vector<int>& b) {
     std::vector<int> result;
 
     int i = 0, j = 0;
@@ -47,8 +67,7 @@ std::vector<int> mergeSortedLists(const std::vector<int>&a, const std::vector<in
         if (a[i] <= b[j]) {
             result.push_back(a[i]);
             i++;
-        }
-        else {
+        } else {
             result.push_back(b[j]);
             j++;
         }
@@ -68,34 +87,34 @@ std::vector<int> mergeSortedLists(const std::vector<int>&a, const std::vector<in
 }
 
 TEST_CASE("Test mergeSortedLists") {
-    std::vector<int> a = { 1, 3, 5, 7 };
-    std::vector<int> b = { 2, 4, 6, 8 };
+    std::vector<int> a = {1, 3, 5, 7};
+    std::vector<int> b = {2, 4, 6, 8};
 
     std::vector<int> result = mergeSortedLists(a, b);
-    REQUIRE(result == std::vector<int>({ 1, 2, 3, 4, 5, 6, 7, 8 }));
+    REQUIRE(result == std::vector<int>({1, 2, 3, 4, 5, 6, 7, 8}));
 
-    a = { 1, 2, 3 };
-    b = { 4, 5, 6 };
-
-    result = mergeSortedLists(a, b);
-    REQUIRE(result == std::vector<int>({ 1, 2, 3, 4, 5, 6 }));
-
-    a = { 1, 3, 5, 7 };
-    b = { 2, 4, 6 };
+    a = {1, 2, 3};
+    b = {4, 5, 6};
 
     result = mergeSortedLists(a, b);
-    REQUIRE(result == std::vector<int>({ 1, 2, 3, 4, 5, 6, 7 }));
+    REQUIRE(result == std::vector<int>({1, 2, 3, 4, 5, 6}));
+
+    a = {1, 3, 5, 7};
+    b = {2, 4, 6};
+
+    result = mergeSortedLists(a, b);
+    REQUIRE(result == std::vector<int>({1, 2, 3, 4, 5, 6, 7}));
 
     a = {};
-    b = { 2, 4, 6, 8 };
+    b = {2, 4, 6, 8};
 
     result = mergeSortedLists(a, b);
-    REQUIRE(result == std::vector<int>({ 2, 4, 6, 8 }));
+    REQUIRE(result == std::vector<int>({2, 4, 6, 8}));
 }
 
 int main() {
-    std::vector<int> a = { 1, 3, 5, 7 };
-    std::vector<int> b = { 2, 4, 6, 8 };
+    std::vector<int> a = {1, 3, 5, 7};
+    std::vector<int> b = {2, 4, 6, 8};
 
     std::vector<int> result = mergeSortedLists(a, b);
 
@@ -114,14 +133,13 @@ sol 1.3
 #include <stack>
 #include <catch2/catch.hpp>
 
-bool areBracketsBalanced(const std::string & s) {
+bool areBracketsBalanced(const std::string& s) {
     std::stack<char> stack;
 
     for (char c : s) {
         if (c == '(' || c == '{' || c == '[') {
             stack.push(c);
-        }
-        else if (c == ')' || c == '}' || c == ']') {
+        } else if (c == ')' || c == '}' || c == ']') {
             if (stack.empty()) {
                 return false;
             }
@@ -167,7 +185,7 @@ sol 2.1
 #include <vector>
 #include <catch2/catch.hpp>
 
-void removeLastDuplicates(std::vector<int>&nums) {
+void removeLastDuplicates(std::vector<int>& nums) {
     std::unordered_map<int, int> count;
 
     for (int i = nums.size() - 1; i >= 0; i--) {
@@ -175,29 +193,28 @@ void removeLastDuplicates(std::vector<int>&nums) {
 
         if (count[num] > 0) {
             nums.erase(nums.begin() + i);
-        }
-        else {
+        } else {
             count[num]++;
         }
     }
 }
 
 TEST_CASE("Test removeLastDuplicates") {
-    std::vector<int> v1 = { 1, 2, 3, 4 };
+    std::vector<int> v1 = {1, 2, 3, 4};
     removeLastDuplicates(v1);
-    REQUIRE(v1 == std::vector<int>({ 1, 2, 3, 4 }));
+    REQUIRE(v1 == std::vector<int>({1, 2, 3, 4}));
 
-    std::vector<int> v2 = { 1, 2, 2, 3, 3, 3 };
+    std::vector<int> v2 = {1, 2, 2, 3, 3, 3};
     removeLastDuplicates(v2);
-    REQUIRE(v2 == std::vector<int>({ 1, 2, 2, 3 }));
+    REQUIRE(v2 == std::vector<int>({1, 2, 2, 3}));
 
-    std::vector<int> v3 = { 1, 1, 1 };
+    std::vector<int> v3 = {1, 1, 1};
     removeLastDuplicates(v3);
-    REQUIRE(v3 == std::vector<int>({ 1 }));
+    REQUIRE(v3 == std::vector<int>({1}));
 
-    std::vector<int> v4 = { 1 };
+    std::vector<int> v4 = {1};
     removeLastDuplicates(v4);
-    REQUIRE(v4 == std::vector<int>({ 1 }));
+    REQUIRE(v4 == std::vector<int>({1}));
 
     std::vector<int> v5 = {};
     removeLastDuplicates(v5);
@@ -205,7 +222,7 @@ TEST_CASE("Test removeLastDuplicates") {
 }
 
 int main() {
-    std::vector<int> nums = { 1, 2, 3, 4, 4, 3, 2, 5 };
+    std::vector<int> nums = {1, 2, 3, 4, 4, 3, 2, 5};
 
     std::cout << "Before removing duplicates: ";
     for (int num : nums) {
@@ -280,52 +297,52 @@ sol 2.3
 string evaluate(string s) {
     vector<string> conditions, expressions;
     int i = 0;
-
+    
     // Extract conditions from input string
-    while (i < s.size()) {
+    while(i < s.size()) {
         string temp;
-        while (i < s.size() && s[i] != ' ') {
+        while(i < s.size() && s[i] != ' ') {
             temp.push_back(s[i]);
             i++;
         }
         i++;
-        if (s[i] == ':')
+        if(s[i] == ':')
             break;
         else
             conditions.push_back(temp);
     }
-
+    
     // Extract expressions from input string
     i = s.size() - 1;
-    while (i >= 0) {
+    while(i >= 0) {
         string temp;
-        while (i >= 0 && s[i] != ' ') {
+        while(i >= 0 && s[i] != ' ') {
             temp.push_back(s[i]);
             i--;
         }
         i--;
         reverse(temp.begin(), temp.end());
         expressions.push_back(temp);
-        if (s[i] == '?')
+        if(s[i] == '?')
             break;
     }
-
+    
     // Check if number of conditions and expressions are valid
-    if (conditions.size() + 1 != expressions.size())
+    if(conditions.size() + 1 != expressions.size())
         return "Invalid Input";
     else {
         bool is_output_print = false;
-
+        
         // Evaluate conditions and print corresponding expressions
-        for (int j = 0; j < conditions.size(); j++) {
-            if (conditions[j] == "false") {
+        for(int j = 0; j < conditions.size(); j++) {
+            if(conditions[j] == "false") {
                 is_output_print = true;
                 return expressions[j];
             }
         }
-
+        
         // Print last expression if no conditions evaluated to false
-        if (!is_output_print)
+        if(!is_output_print)
             return expressions.back();
     }
 }
@@ -339,12 +356,12 @@ TEST_CASE("Test evaluate") {
     REQUIRE(evaluate("false ? 1 : true ? false ? 3 : 4 : 2") == "3");
 }
 
-int main() {
-    std::string s = "true ? true : false";
-    string ans = evaluate(s);
-    std::cout << ans << std::endl;
-
-    return 0;
+int main(){
+	std::string s = "true ? true : false" ;
+	string ans=evaluate(s);
+	std::cout << ans << std::endl;
+	
+	return 0;
 }
 
 sol 3.1
@@ -355,15 +372,14 @@ sol 3.1
 #include <cmath>
 #include <catch2/catch.hpp>
 
-std::vector<int> squareSorted(std::vector<int>&nums) {
+std::vector<int> squareSorted(std::vector<int>& nums) {
     std::vector<int> res(nums.size());
     int left = 0, right = nums.size() - 1;
     for (int i = right; i >= 0; i--) {
         if (abs(nums[left]) > abs(nums[right])) {
             res[i] = nums[left] * nums[left];
             left++;
-        }
-        else {
+        } else {
             res[i] = nums[right] * nums[right];
             right--;
         }
@@ -372,25 +388,25 @@ std::vector<int> squareSorted(std::vector<int>&nums) {
 }
 
 TEST_CASE("Testing squareSorted function") {
-    vector<int> nums1 = { -5, -3, 0, 2, 8 };
-    vector<int> nums2 = { -2, 0, 1, 3 };
-    vector<int> nums3 = { -9, -7, -3, -1, 2, 3, 7, 9 };
+    vector<int> nums1 = {-5, -3, 0, 2, 8};
+    vector<int> nums2 = {-2, 0, 1, 3};
+    vector<int> nums3 = {-9, -7, -3, -1, 2, 3, 7, 9};
 
     SECTION("Test case 1") {
         vector<int> res = squareSorted(nums1);
-        vector<int> expected = { 0, 4, 9, 25, 64 };
+        vector<int> expected = {0, 4, 9, 25, 64};
         REQUIRE(res == expected);
     }
 
     SECTION("Test case 2") {
         vector<int> res = squareSorted(nums2);
-        vector<int> expected = { 0, 1, 4, 9 };
+        vector<int> expected = {0, 1, 4, 9};
         REQUIRE(res == expected);
     }
 
     SECTION("Test case 3") {
         vector<int> res = squareSorted(nums3);
-        vector<int> expected = { 1, 4, 9, 49, 49, 81, 81, 121 };
+        vector<int> expected = {1, 4, 9, 49, 49, 81, 81, 121};
         REQUIRE(res == expected);
     }
 }
@@ -407,13 +423,12 @@ sol 3.2
 #include <string>
 #include <cctype>
 
-int sum_of_numbers(const std::string & s) {
+int sum_of_numbers(const std::string& s) {
     int sum = 0, current_number = 0;
     for (char c : s) {
         if (isdigit(c)) {
             current_number = current_number * 10 + (c - '0');
-        }
-        else {
+        } else {
             sum += current_number;
             current_number = 0;
         }
@@ -449,17 +464,17 @@ bool fourSum(vector<int>& nums, int k) {
     // Create a hash table to store two element sums and their pair
     unordered_map<int, pair<int, int>> twoSums;
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            twoSums[nums[i] + nums[j]] = { i, j };
+        for (int j = i+1; j < n; j++) {
+            twoSums[nums[i]+nums[j]] = {i, j};
         }
     }
 
     // Find four element sum using the hash table
     for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
+        for (int j = i+1; j < n; j++) {
             int twoSum = nums[i] + nums[j];
-            if (twoSums.find(k - twoSum) != twoSums.end()) {
-                auto p = twoSums[k - twoSum];
+            if (twoSums.find(k-twoSum) != twoSums.end()) {
+                auto p = twoSums[k-twoSum];
                 if (p.first != i && p.first != j && p.second != i && p.second != j) {
                     return true;
                 }
@@ -471,13 +486,13 @@ bool fourSum(vector<int>& nums, int k) {
 }
 
 TEST_CASE("Test for fourSum", "[fourSum]") {
-    vector<int> v1 = { 1, 2, 3, 4, 5 };
+    vector<int> v1 = {1, 2, 3, 4, 5};
     REQUIRE(fourSum(v1, 10) == true);
-    vector<int> v2 = { 2, 4, 6, 8 };
+    vector<int> v2 = {2, 4, 6, 8};
     REQUIRE(fourSum(v2, 20) == true);
-    vector<int> v3 = { 1, 2, 3, 4, 5 };
+    vector<int> v3 = {1, 2, 3, 4, 5};
     REQUIRE(fourSum(v3, 20) == false);
-    vector<int> v4 = { 1, 2, 3 };
+    vector<int> v4 = {1, 2, 3};
     REQUIRE(fourSum(v4, 10) == false);
 }
 
@@ -505,8 +520,7 @@ std::string reverseWords(std::string s) {
                 words.push_back(word);
                 word = "";
             }
-        }
-        else {
+        } else {
             word += c;
         }
     }
@@ -608,7 +622,7 @@ sol 4.3
 #include <iostream>
 #include "catch2/catch.hpp"
 
-int maxOperations(std::vector<int>&nums, int target) {
+int maxOperations(std::vector<int>& nums, int target) {
     std::unordered_map<int, int> freq;
     int count = 0;
     for (int i : nums) {
@@ -624,24 +638,24 @@ int maxOperations(std::vector<int>&nums, int target) {
 }
 
 TEST_CASE("Test maxOperations function") {
-    std::vector<int> nums1 = { 1,2,3,4,5 };
+    std::vector<int> nums1 = {1,2,3,4,5};
     int target1 = 6;
     int expected1 = 2;
     REQUIRE(maxOperations(nums1, target1) == expected1);
 
-    std::vector<int> nums2 = { 3,1,3,4,3 };
+    std::vector<int> nums2 = {3,1,3,4,3};
     int target2 = 6;
     int expected2 = 1;
     REQUIRE(maxOperations(nums2, target2) == expected2);
 
-    std::vector<int> nums3 = { 1,1,1,1 };
+    std::vector<int> nums3 = {1,1,1,1};
     int target3 = 2;
     int expected3 = 2;
     REQUIRE(maxOperations(nums3, target3) == expected3);
 }
 
 int main() {
-    std::vector<int> nums = { 1,2,3,4,5 };
+    std::vector<int> nums = {1,2,3,4,5};
     int target = 6;
     std::cout << "maxOperations(nums, target) = " << maxOperations(nums, target) << std::endl;
 
@@ -655,15 +669,14 @@ sol 5.1
 #include <algorithm>
 #include <catch2/catch.hpp>
 
-std::vector<int> mergeSortedArrays(std::vector<int>&a, std::vector<int>&b) {
+std::vector<int> mergeSortedArrays(std::vector<int>& a, std::vector<int>& b) {
     std::vector<int> result;
     int i = 0, j = 0;
     while (i < a.size() && j < b.size()) {
         if (a[i] <= b[j]) {
             result.push_back(a[i]);
             i++;
-        }
-        else {
+        } else {
             result.push_back(b[j]);
             j++;
         }
@@ -680,27 +693,27 @@ std::vector<int> mergeSortedArrays(std::vector<int>&a, std::vector<int>&b) {
 }
 
 TEST_CASE("Merging two sorted arrays", "[mergeSortedArrays]") {
-    std::vector<int> a = { 1, 2, 4, 6, 8 };
-    std::vector<int> b = { 3, 5, 7, 9 };
-    std::vector<int> expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    std::vector<int> a = {1, 2, 4, 6, 8};
+    std::vector<int> b = {3, 5, 7, 9};
+    std::vector<int> expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::vector<int> result = mergeSortedArrays(a, b);
     REQUIRE(result == expected);
 
-    a = { 1, 3, 5, 7 };
-    b = { 2, 4, 6, 8, 9, 10 };
-    expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    a = {1, 3, 5, 7};
+    b = {2, 4, 6, 8, 9, 10};
+    expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     result = mergeSortedArrays(a, b);
     REQUIRE(result == expected);
 
-    a = { 1 };
-    b = { 2 };
-    expected = { 1, 2 };
+    a = {1};
+    b = {2};
+    expected = {1, 2};
     result = mergeSortedArrays(a, b);
     REQUIRE(result == expected);
 
-    a = { 3, 4, 5 };
-    b = { 1, 2 };
-    expected = { 1, 2, 3, 4, 5 };
+    a = {3, 4, 5};
+    b = {1, 2};
+    expected = {1, 2, 3, 4, 5};
     result = mergeSortedArrays(a, b);
     REQUIRE(result == expected);
 
@@ -722,7 +735,7 @@ sol 5.2
 #include <vector>
 #include <algorithm>
 
-std::vector<int> squareSorted(const std::vector<int>&nums) {
+std::vector<int> squareSorted(const std::vector<int>& nums) {
     std::vector<int> result(nums.size());
     int left = 0, right = nums.size() - 1, idx = right;
     while (left <= right) {
@@ -779,8 +792,7 @@ bool checkLeavesAtSameLevel(TreeNode* root) {
         if (p.first->left == NULL && p.first->right == NULL) {
             if (level == -1) {
                 level = p.second;
-            }
-            else if (level != p.second) {
+            } else if (level != p.second) {
                 return false;
             }
         }
@@ -1058,8 +1070,7 @@ int main() {
 
     if (isPerfectSquare(n)) {
         std::cout << n << " is a perfect square." << std::endl;
-    }
-    else {
+    } else {
         std::cout << n << " is not a perfect square." << std::endl;
     }
 
@@ -1091,7 +1102,7 @@ int maxPathSum(TreeNode* root) {
 
 int main() {
     // Example usage:
-
+     
     TreeNode* root = new TreeNode(1);
     root->left = new TreeNode(2);
     root->right = new TreeNode(3);
@@ -1123,20 +1134,24 @@ int maxPathSum(TreeNode* root) {
 }
 
 TEST_CASE("Test maxPathSum", "[maxPathSum]") {
-
+     
     TreeNode* root = new TreeNode(1);
     root->left = new TreeNode(2);
     root->right = new TreeNode(3);
     root->left->left = new TreeNode(4);
     root->left->right = new TreeNode(5);
-    REQUIRE(maxPathSum(root) == 12);
-
+    REQUIRE(maxPathSum(root) == 11);
+    
     TreeNode* root2 = new TreeNode(-10);
     root2->left = new TreeNode(9);
     root2->right = new TreeNode(20);
     root2->right->left = new TreeNode(15);
     root2->right->right = new TreeNode(7);
     REQUIRE(maxPathSum(root2) == 42);
+    
+    TreeNode* root3 = new TreeNode(1);
+    root->left = new TreeNode(2);
+    root->right = new TreeNode(3);
 }
 
 sol 8.1
@@ -1207,19 +1222,19 @@ std::vector<int> merge(std::vector<int> a, std::vector<int> b) {
 }
 
 TEST_CASE("Test merge function") {
-    std::vector<int> a = { 1, 3, 5, 7, 9 };
-    std::vector<int> b = { 2, 4, 6, 8, 10 };
-    std::vector<int> expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    std::vector<int> a = {1, 3, 5, 7, 9};
+    std::vector<int> b = {2, 4, 6, 8, 10};
+    std::vector<int> expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     REQUIRE(merge(a, b) == expected);
 
-    a = { 1, 2, 3, 4, 5 };
-    b = { 6, 7, 8, 9, 10 };
-    expected = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    a = {1, 2, 3, 4, 5};
+    b = {6, 7, 8, 9, 10};
+    expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     REQUIRE(merge(a, b) == expected);
 
-    a = { 1, 3, 5, 7, 9 };
-    b = { 0, 2, 4, 6, 8 };
-    expected = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    a = {1, 3, 5, 7, 9};
+    b = {0, 2, 4, 6, 8};
+    expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     REQUIRE(merge(a, b) == expected);
 }
 
@@ -1241,7 +1256,7 @@ struct ListNode {
 
 bool isPalindrome(ListNode* head) {
     if (!head || !head->next) return true; // empty list or single node list
-
+    
     // find the midpoint of the list
     ListNode* slow = head;
     ListNode* fast = head->next;
@@ -1249,7 +1264,7 @@ bool isPalindrome(ListNode* head) {
         slow = slow->next;
         fast = fast->next->next;
     }
-
+    
     // reverse the second half of the list
     ListNode* prev = NULL;
     ListNode* curr = slow->next;
@@ -1260,7 +1275,7 @@ bool isPalindrome(ListNode* head) {
         curr = temp;
     }
     slow->next = NULL;
-
+    
     // compare the first and second halves of the list
     ListNode* p1 = head;
     ListNode* p2 = prev;
@@ -1276,30 +1291,30 @@ TEST_CASE("Test isPalindrome function") {
     // empty list
     ListNode* l1 = NULL;
     REQUIRE(isPalindrome(l1) == true);
-
+    
     // single node list
     ListNode* l2 = new ListNode(1);
     REQUIRE(isPalindrome(l2) == true);
-
+    
     // palindrome with odd number of nodes
     ListNode* l3 = new ListNode(1);
     l3->next = new ListNode(2);
     l3->next->next = new ListNode(1);
     REQUIRE(isPalindrome(l3) == true);
-
+    
     // not a palindrome with odd number of nodes
     ListNode* l4 = new ListNode(1);
     l4->next = new ListNode(2);
     l4->next->next = new ListNode(3);
     REQUIRE(isPalindrome(l4) == false);
-
+    
     // palindrome with even number of nodes
     ListNode* l5 = new ListNode(1);
     l5->next = new ListNode(2);
     l5->next->next = new ListNode(2);
     l5->next->next->next = new ListNode(1);
     REQUIRE(isPalindrome(l5) == true);
-
+    
     // not a palindrome with even number of nodes
     ListNode* l6 = new ListNode(1);
     l6->next = new ListNode(2);
@@ -1307,7 +1322,7 @@ TEST_CASE("Test isPalindrome function") {
     l6->next->next->next = new ListNode(4);
     REQUIRE(isPalindrome(l6) == false);
 }
-
+ 
 int main(int argc, char* argv[]) {
     // global setup...
     int result = Catch::Session().run(argc, argv);
@@ -1403,12 +1418,12 @@ int largestCommonDivisor(const std::vector<int>& nums) {
 #include <catch2/catch.hpp>
 
 TEST_CASE("Largest Common Divisor of Positive Integers") {
-    REQUIRE(largestCommonDivisor({ 10, 20, 30, 40, 50 }) == 10);
-    REQUIRE(largestCommonDivisor({ 5, 7, 15, 20, 25 }) == 1);
-    REQUIRE(largestCommonDivisor({ 25, 125, 250, 375, 500 }) == 25);
-    REQUIRE(largestCommonDivisor({ 13, 26, 39, 52, 65 }) == 13);
-    REQUIRE(largestCommonDivisor({ 3 }) == 3);
-    REQUIRE(largestCommonDivisor({ 15, 15, 15, 15 }) == 15);
+    REQUIRE(largestCommonDivisor({10, 20, 30, 40, 50}) == 10);
+    REQUIRE(largestCommonDivisor({5, 7, 15, 20, 25}) == 1);
+    REQUIRE(largestCommonDivisor({25, 125, 250, 375, 500}) == 25);
+    REQUIRE(largestCommonDivisor({13, 26, 39, 52, 65}) == 13);
+    REQUIRE(largestCommonDivisor({3}) == 3);
+    REQUIRE(largestCommonDivisor({15, 15, 15, 15}) == 15);
 }
 
 sol 9.3
@@ -1487,27 +1502,27 @@ sol 10.1
 #include <cmath>
 #include <catch2/catch.hpp>
 
-bool only235PrimeFactors(int n) {
-    // Handle base cases
-    if (n <= 1) {
-        return false;
-    }
-    if (n == 2 || n == 3 || n == 5) {
-        return true;
-    }
-    // Check if n has any prime factors other than 2, 3 or 5
-    std::vector<int> primes{ 2, 3, 5 };
-    std::unordered_set<int> primeSet(primes.begin(), primes.end());
-    for (int i = 0; i < primes.size(); i++) {
-        while (n % primes[i] == 0) {
-            n /= primes[i];
+ bool only235PrimeFactors(int n) {
+        if(n==0){
+            return false;
         }
+      while(n != 1){
+          if(n%2==0){
+              n/=2;
+          }
+          else if(n%3==0){
+              n/=3;
+          }
+          else if(n%5==0){
+              n/=5;
+          }
+          else{
+              return false;
+          }
+      }
+      return true;
     }
-    if (primeSet.find(n) != primeSet.end()) {
-        return true;
-    }
-    return false;
-}
+};
 
 TEST_CASE("Testing only235PrimeFactors", "[only235PrimeFactors]") {
     REQUIRE(only235PrimeFactors(2) == true);
@@ -1534,7 +1549,7 @@ sol 10.2
 
 struct ListNode {
     int val;
-    ListNode* next;
+    ListNode *next;
     ListNode(int x) : val(x), next(nullptr) {}
 };
 
@@ -1567,7 +1582,7 @@ sol 10.3
 #include <algorithm>
 #include <catch2/catch.hpp>
 
-int maxUniqueSublistSum(const std::vector<int>&nums) {
+int maxUniqueSublistSum(const std::vector<int>& nums) {
     int left = 0, right = 0;
     int sum = 0, max_sum = 0;
     std::unordered_set<int> seen_values;
@@ -1578,8 +1593,7 @@ int maxUniqueSublistSum(const std::vector<int>&nums) {
             sum += nums[right];
             max_sum = std::max(max_sum, sum);
             right++;
-        }
-        else {
+        } else {
             seen_values.erase(nums[left]);
             sum -= nums[left];
             left++;
@@ -1590,16 +1604,16 @@ int maxUniqueSublistSum(const std::vector<int>&nums) {
 }
 
 TEST_CASE("maxUniqueSublistSum - Example Tests") {
-    REQUIRE(maxUniqueSublistSum({ 5, 2, 1, 3, 2, 4, 1 }) == 12);
-    REQUIRE(maxUniqueSublistSum({ 1, 2, 3, 2, 1 }) == 6);
-    REQUIRE(maxUniqueSublistSum({ 1, 1, 1, 1, 1 }) == 1);
+    REQUIRE(maxUniqueSublistSum({5, 2, 1, 3, 2, 4, 1}) == 12);
+    REQUIRE(maxUniqueSublistSum({1, 2, 3, 2, 1}) == 6);
+    REQUIRE(maxUniqueSublistSum({1, 1, 1, 1, 1}) == 1);
 }
 
 TEST_CASE("maxUniqueSublistSum - Edge Cases") {
     REQUIRE(maxUniqueSublistSum({}) == 0);
-    REQUIRE(maxUniqueSublistSum({ 0 }) == 0);
-    REQUIRE(maxUniqueSublistSum({ 1, 2, 3, 4, 5 }) == 15);
-    REQUIRE(maxUniqueSublistSum({ 5, 4, 3, 2, 1 }) == 5);
+    REQUIRE(maxUniqueSublistSum({0}) == 0);
+    REQUIRE(maxUniqueSublistSum({1, 2, 3, 4, 5}) == 15);
+    REQUIRE(maxUniqueSublistSum({5, 4, 3, 2, 1}) == 5);
 }
 
 sol 11.1
@@ -1613,7 +1627,7 @@ sol 11.1
 #include <iomanip>
 
 // Function to return relative ranking of each person
-std::vector<int> relativeRanking(std::vector<int>&nums) {
+std::vector<int> relativeRanking(std::vector<int>& nums) {
     std::unordered_map<int, int> map;  // Create a map to store each person's ranking
     std::vector<int> copy(nums);  // Create a copy of the nums vector to sort it
     std::sort(copy.rbegin(), copy.rend());  // Sort the copy of the nums vector in descending order
@@ -1722,52 +1736,52 @@ sol 11.3
 string evaluate(string s) {
     vector<string> conditions, expressions;
     int i = 0;
-
+    
     // Extract conditions from input string
-    while (i < s.size()) {
+    while(i < s.size()) {
         string temp;
-        while (i < s.size() && s[i] != ' ') {
+        while(i < s.size() && s[i] != ' ') {
             temp.push_back(s[i]);
             i++;
         }
         i++;
-        if (s[i] == ':')
+        if(s[i] == ':')
             break;
         else
             conditions.push_back(temp);
     }
-
+    
     // Extract expressions from input string
     i = s.size() - 1;
-    while (i >= 0) {
+    while(i >= 0) {
         string temp;
-        while (i >= 0 && s[i] != ' ') {
+        while(i >= 0 && s[i] != ' ') {
             temp.push_back(s[i]);
             i--;
         }
         i--;
         reverse(temp.begin(), temp.end());
         expressions.push_back(temp);
-        if (s[i] == '?')
+        if(s[i] == '?')
             break;
     }
-
+    
     // Check if number of conditions and expressions are valid
-    if (conditions.size() + 1 != expressions.size())
+    if(conditions.size() + 1 != expressions.size())
         return "Invalid Input";
     else {
         bool is_output_print = false;
-
+        
         // Evaluate conditions and print corresponding expressions
-        for (int j = 0; j < conditions.size(); j++) {
-            if (conditions[j] == "false") {
+        for(int j = 0; j < conditions.size(); j++) {
+            if(conditions[j] == "false") {
                 is_output_print = true;
                 return expressions[j];
             }
         }
-
+        
         // Print last expression if no conditions evaluated to false
-        if (!is_output_print)
+        if(!is_output_print)
             return expressions.back();
     }
 }
@@ -1781,12 +1795,12 @@ TEST_CASE("Test evaluate") {
     REQUIRE(evaluate("false ? 1 : true ? false ? 3 : 4 : 2") == "3");
 }
 
-int main() {
-    std::string s = "true ? true : false";
-    string ans = evaluate(s);
-    std::cout << ans << std::endl;
-
-    return 0;
+int main(){
+	std::string s = "true ? true : false" ;
+	string ans=evaluate(s);
+	std::cout << ans << std::endl;
+	
+	return 0;
 }
 
 sol 12.1
@@ -1797,8 +1811,7 @@ sol 12.1
 int gcd(int a, int b) {
     if (b == 0) {
         return a;
-    }
-    else {
+    } else {
         return gcd(b, a % b);
     }
 }
@@ -1812,16 +1825,16 @@ int largestCommonDivisor(const std::vector<int>& nums) {
 }
 
 TEST_CASE("largestCommonDivisor of a list of positive integers") {
-    std::vector<int> nums1{ 2, 4, 6, 8, 10 };
+    std::vector<int> nums1 { 2, 4, 6, 8, 10 };
     REQUIRE(largestCommonDivisor(nums1) == 2);
 
-    std::vector<int> nums2{ 12, 18, 24 };
+    std::vector<int> nums2 { 12, 18, 24 };
     REQUIRE(largestCommonDivisor(nums2) == 6);
 
-    std::vector<int> nums3{ 7, 14, 21 };
+    std::vector<int> nums3 { 7, 14, 21 };
     REQUIRE(largestCommonDivisor(nums3) == 7);
 
-    std::vector<int> nums4{ 5 };
+    std::vector<int> nums4 { 5 };
     REQUIRE(largestCommonDivisor(nums4) == 5);
 }
 
@@ -1832,8 +1845,15 @@ sol 12.2
 #include <catch2/catch.hpp>
 
 bool isPerfectSquare(int n) {
-    int k = sqrt(n);
-    return k * k == n;
+    int sum = 0;
+    int i = 1;
+
+    while (sum < n) {
+        sum += i;
+        i += 2;
+    }
+
+    return (sum == n);
 }
 
 TEST_CASE("Test isPerfectSquare") {
@@ -1852,8 +1872,7 @@ int main() {
 
     if (isPerfectSquare(n)) {
         std::cout << n << " is a perfect square." << std::endl;
-    }
-    else {
+    } else {
         std::cout << n << " is not a perfect square." << std::endl;
     }
 
@@ -1871,21 +1890,16 @@ struct ListNode {
     ListNode(int x) : val(x), next(nullptr) {}
 };
 
-double getMiddleNodeValue(ListNode* head) {
-    if (head == nullptr) {
-        throw std::invalid_argument("List is empty");
+int findMiddleNode(ListNode* head) {
+    if (!head) return -1;
+    if (!head->next) return head->val;
+    ListNode* l = head;
+    ListNode* h = head;
+    while (h && h->next) {
+        l = l->next;
+        h = h->next->next;
     }
-    ListNode* slow = head;
-    ListNode* fast = head;
-    while (fast != nullptr && fast->next != nullptr) {
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    if (fast == nullptr) {
-        return slow->val;
-    }
-    // If there are two middle nodes
-    return (static_cast<double>(slow->val) + static_cast<double>(slow->next->val)) / 2;
+    return l->val;
 }
 
 #define CATCH_CONFIG_MAIN
@@ -1907,7 +1921,7 @@ TEST_CASE("Test getMiddleNodeValue") {
     head2->next->next->next = new ListNode(4);
     head2->next->next->next->next = new ListNode(5);
     head2->next->next->next->next->next = new ListNode(6);
-    REQUIRE(getMiddleNodeValue(head2) == 3.5);
+    REQUIRE(getMiddleNodeValue(head2) == 4);
 
     // Test case 3
     ListNode* head3 = new ListNode(1);
@@ -1945,8 +1959,7 @@ int main() {
 
     if (isPerfectSquare(n)) {
         std::cout << n << " is a perfect square." << std::endl;
-    }
-    else {
+    } else {
         std::cout << n << " is not a perfect square." << std::endl;
     }
 
@@ -1960,13 +1973,12 @@ sol 13.2
 #include <string>
 #include <cctype>
 
-int sum_of_numbers(const std::string & s) {
+int sum_of_numbers(const std::string& s) {
     int sum = 0, current_number = 0;
     for (char c : s) {
         if (isdigit(c)) {
             current_number = current_number * 10 + (c - '0');
-        }
-        else {
+        } else {
             sum += current_number;
             current_number = 0;
         }
@@ -1993,7 +2005,7 @@ sol 13.3
 #include <algorithm>
 #include <catch2/catch.hpp>
 
-int maxUniqueSublistSum(const std::vector<int>&nums) {
+int maxUniqueSublistSum(const std::vector<int>& nums) {
     std::unordered_set<int> unique_nums;
     int sum = 0, max_sum = 0;
     int left = 0, right = 0;
@@ -2016,7 +2028,7 @@ int maxUniqueSublistSum(const std::vector<int>&nums) {
 }
 
 TEST_CASE("Test maxUniqueSublistSum") {
-    std::vector<std::pair<std::vector<int>, int>> testCases{
+    std::vector<std::pair<std::vector<int>, int>> testCases {
         {{1, 2, 3, 2, 5, 6, 7, 5}, 18},
         {{1, 1, 1, 1, 1}, 1},
         {{}, 0},
@@ -2046,7 +2058,7 @@ sol 14.1
 #include <algorithm>
 #include <catch2/catch.hpp>
 
-int maxSumSublist(std::vector<int>&nums) {
+int maxSumSublist(std::vector<int>& nums) {
     int n = nums.size();
     int max_sum = 0;
     int i = 0, j = 0;
@@ -2066,24 +2078,24 @@ int maxSumSublist(std::vector<int>&nums) {
 }
 
 TEST_CASE("maxSumSublist - Example Test Cases") {
-    std::vector<int> nums1 = { 1,2,3,2,5 };
+    std::vector<int> nums1 = {1,2,3,2,5};
     REQUIRE(maxSumSublist(nums1) == 8);
 
-    std::vector<int> nums2 = { 1,1,1,1,1 };
+    std::vector<int> nums2 = {1,1,1,1,1};
     REQUIRE(maxSumSublist(nums2) == 1);
 
-    std::vector<int> nums3 = { 1,2,3,4,5 };
+    std::vector<int> nums3 = {1,2,3,4,5};
     REQUIRE(maxSumSublist(nums3) == 15);
 }
 
 TEST_CASE("maxSumSublist - Edge Test Cases") {
-    std::vector<int> nums1 = { 0 };
+    std::vector<int> nums1 = {0};
     REQUIRE(maxSumSublist(nums1) == 0);
 
-    std::vector<int> nums2 = { 2,2,2,2,2 };
+    std::vector<int> nums2 = {2,2,2,2,2};
     REQUIRE(maxSumSublist(nums2) == 2);
 
-    std::vector<int> nums3 = { 1,2,3,4,5,1,2,3,4,5 };
+    std::vector<int> nums3 = {1,2,3,4,5,1,2,3,4,5};
     REQUIRE(maxSumSublist(nums3) == 15);
 }
 
@@ -2099,7 +2111,7 @@ sol 14.2
 
 struct ListNode {
     int val;
-    ListNode* next;
+    ListNode *next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
@@ -2147,8 +2159,7 @@ std::string deleteConsecutiveDuplicates(std::string s) {
     for (char c : s) {
         if (!st.empty() && st.top() == c) {
             st.pop();
-        }
-        else {
+        } else {
             st.push(c);
         }
     }
@@ -2256,7 +2267,7 @@ bool only235PrimeFactors(int n) {
         return true;
     }
     // Check if n has any prime factors other than 2, 3 or 5
-    std::vector<int> primes{ 2, 3, 5 };
+    std::vector<int> primes{2, 3, 5};
     std::unordered_set<int> primeSet(primes.begin(), primes.end());
     for (int i = 0; i < primes.size(); i++) {
         while (n % primes[i] == 0) {
@@ -2292,7 +2303,7 @@ sol 15.3
 #include <iostream>
 #include "catch2/catch.hpp"
 
-int maxOperations(std::vector<int>&nums, int target) {
+int maxOperations(std::vector<int>& nums, int target) {
     std::unordered_map<int, int> freq;
     int count = 0;
     for (int i : nums) {
@@ -2308,24 +2319,24 @@ int maxOperations(std::vector<int>&nums, int target) {
 }
 
 TEST_CASE("Test maxOperations function") {
-    std::vector<int> nums1 = { 1,2,3,4,5 };
+    std::vector<int> nums1 = {1,2,3,4,5};
     int target1 = 6;
     int expected1 = 2;
     REQUIRE(maxOperations(nums1, target1) == expected1);
 
-    std::vector<int> nums2 = { 3,1,3,4,3 };
+    std::vector<int> nums2 = {3,1,3,4,3};
     int target2 = 6;
     int expected2 = 1;
     REQUIRE(maxOperations(nums2, target2) == expected2);
 
-    std::vector<int> nums3 = { 1,1,1,1 };
+    std::vector<int> nums3 = {1,1,1,1};
     int target3 = 2;
     int expected3 = 2;
     REQUIRE(maxOperations(nums3, target3) == expected3);
 }
 
 int main() {
-    std::vector<int> nums = { 1,2,3,4,5 };
+    std::vector<int> nums = {1,2,3,4,5};
     int target = 6;
     std::cout << "maxOperations(nums, target) = " << maxOperations(nums, target) << std::endl;
 
